@@ -98,7 +98,15 @@ graph TD
 
 ## 🚀 Quickstart Guide
 
-### 1. Multi-Agent Engine & Backend Setup
+### 1. Repository & Automated Sync
+- GitHub Repo: [https://github.com/mohdshak/resume-automation.git](https://github.com/mohdshak/resume-automation.git)
+- **Automatic Push on Commit**: The repository is pre-configured with a `.git/hooks/post-commit` hook that automatically pushes to GitHub after every local commit.
+- **Continuous File-Watch Auto-Sync**: To continuously monitor file changes and auto-commit/push in real-time, run:
+  ```bash
+  ./scripts/auto_sync.sh
+  ```
+
+### 2. Multi-Agent Engine & Backend Setup
 ```bash
 cd backend
 python3 -m venv venv
@@ -109,7 +117,7 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
-### 2. Frontend Setup
+### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
@@ -117,3 +125,4 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to access the ResumeTailor AI workspace.
+
