@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, Edit3, ArrowRight, User, Briefcase, GraduationCap, Wrench, Plus, Trash2, FileText, Eye, CheckCircle2 } from "lucide-react";
+import { Check, Edit3, ArrowRight, User, Briefcase, GraduationCap, Wrench, Plus, Trash2, FileText, Eye, CheckCircle2, Code } from "lucide-react";
 import { ResumeData } from "@/lib/types";
 import { LocalStore } from "@/lib/store";
 import { parseResumeTextToSchema } from "@/lib/resume-parser";
@@ -13,18 +13,18 @@ interface ProfileVerificationProps {
 
 export const ProfileVerification: React.FC<ProfileVerificationProps> = ({ initialProfile, onConfirmed }) => {
   const [profile, setProfile] = useState<ResumeData>(initialProfile);
-  const [viewMode, setViewMode] = useState<"structured" | "raw">("structured");
+  const [viewMode, setViewMode] = useState<"structured" | "html" | "raw">("structured");
   const [rawDocumentText, setRawDocumentText] = useState<string>(initialProfile.raw_text || "");
+  const [htmlContent, setHtmlContent] = useState<string>(initialProfile.html_content || "");
   const [newSkill, setNewSkill] = useState("");
 
   const handleConfirm = () => {
-    LocalStore.saveMasterProfile({ ...profile, raw_text: rawDocumentText });
+    LocalStore.saveMasterProfile({ ...profile, raw_text: rawDocumentText, html_content: htmlContent });
     onConfirmed();
   };
 
   const handleRawTextChange = (text: string) => {
     setRawDocumentText(text);
-    // Real-time re-parse from updated raw text
     try {
       const updated = parseResumeTextToSchema(text);
       setProfile(updated);
@@ -90,14 +90,14 @@ export const ProfileVerification: React.FC<ProfileVerificationProps> = ({ initia
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400">Step 3 of 3 • Master Ground Truth</span>
             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/60 border border-emerald-800/50 text-emerald-400">
-              100% Exact Capture
+              HTML-Converted 100% Fidelity
             </span>
           </div>
           <h2 className="text-xl font-black text-white mt-0.5">Verify & Ground Your Complete Resume</h2>
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Dual Mode Switcher */}
+          {/* 3-Way Mode Switcher */}
           <div className="flex bg-[#090d16] p-1 rounded-lg border border-slate-800 text-xs">
             <button
               onClick={() => setViewMode("structured")}
@@ -105,7 +105,15 @@ export const ProfileVerification: React.FC<ProfileVerificationProps> = ({ initia
                 viewMode === "structured" ? "bg-indigo-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
               }`}
             >
-              Structured Ground Truth
+              Structured Vault
+            </button>
+            <button
+              onClick={() => setViewMode("html")}
+              className={`px-3 py-1 rounded-md font-medium transition-all ${
+                viewMode === "html" ? "bg-indigo-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
+              }`}
+            >
+              Rendered HTML
             </button>
             <button
               onClick={() => setViewMode("raw")}
@@ -113,7 +121,7 @@ export const ProfileVerification: React.FC<ProfileVerificationProps> = ({ initia
                 viewMode === "raw" ? "bg-indigo-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
               }`}
             >
-              Exact Raw Document
+              Raw Text
             </button>
           </div>
 
@@ -126,7 +134,23 @@ export const ProfileVerification: React.FC<ProfileVerificationProps> = ({ initia
         </div>
       </div>
 
-      {/* Raw Document View (100% Exact Match) */}
+      {/* Rendered HTML Visual Document View */}
+      {viewMode === "html" && (
+        <div className="space-y-3">
+          <div className="text-xs text-slate-400">
+            Converted visual document retaining original bold headers, paragraphs, and lists:
+          </div>
+          <div className="panel p-6 rounded-xl bg-[#090d16] border border-slate-800 max-h-[62vh] overflow-y-auto text-slate-200 text-xs leading-relaxed space-y-2 prose prose-invert max-w-none">
+            {htmlContent ? (
+              <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+            ) : (
+              <div className="text-slate-500 italic">No HTML stream generated. Switch to Structured Vault to view.</div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Raw Document View */}
       {viewMode === "raw" && (
         <div className="space-y-3">
           <div className="flex items-center justify-between text-xs text-slate-400">

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { extractTextFromPdfBuffer } from "@/lib/pdf-server";
-import { extractTextFromDocxBuffer, parseResumeTextToSchema } from "@/lib/resume-parser";
-
+import { convertPdfToHtml, convertDocxToHtml } from "@/lib/pdf-to-html";
+import { parseHtmlResumeToSchema } from "@/lib/html-resume-parser";
+import { parseResumeTextToSchema } from "@/lib/resume-parser";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,37 +16,35 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
     const filename = file.name.toLowerCase();
 
-    let extractedText = "";
+    let parsedProfile;
+    let htmlContent = "";
 
     if (filename.endsWith(".json")) {
       try {
         const jsonStr = buffer.toString("utf-8");
-        const parsedJson = JSON.parse(jsonStr);
-        return NextResponse.json({
-          status: "success",
-          filename: file.name,
-          parsed_profile: parsedJson,
-        });
+        parsedProfile = JSON.parse(jsonStr);
       } catch {
-        extractedText = buffer.toString("utf-8");
+        parsedProfile = parseResumeTextToSchema(buffer.toString("utf-8"));
       }
-    } else if (filename.endsWith(".pdf")) {
-      extractedText = await extractTextFromPdfBuffer(buffer);
     } else if (filename.endsWith(".docx")) {
-      extractedText = extractTextFromDocxBuffer(buffer);
+      htmlContent = await convertDocxToHtml(buffer);
+      parsedProfile = parseHtmlResumeToSchema(htmlContent);
+    } else if (filename.endsWith(".pdf")) {
+      htmlContent = await convertPdfToHtml(buffer);
+      parsedProfile = parseHtmlResumeToSchema(htmlContent);
     } else {
-      extractedText = buffer.toString("utf-8");
+      const text = buffer.toString("utf-8");
+      parsedProfile = parseResumeTextToSchema(text);
     }
-
-    const parsedProfile = parseResumeTextToSchema(extractedText);
 
     return NextResponse.json({
       status: "success",
       filename: file.name,
+      html_content: htmlContent || parsedProfile.html_content || "",
       parsed_profile: parsedProfile,
     });
   } catch (error: any) {
-    console.error("Upload parse error:", error);
+    console.error("Upload & HTML parse error:", error);
     return NextResponse.json({ error: error.message || "Failed to parse resume" }, { status: 500 });
   }
 }
