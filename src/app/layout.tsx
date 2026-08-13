@@ -6,8 +6,8 @@ import { Navbar } from "@/components/common/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ResumeTailor AI | Multi-Agent ATS Auto-Resume Optimizer",
-  description: "Collaborative 7-Agent AI Platform for precision job description matching, XYZ bullet optimization, and ATS >= 85% compliance.",
+  title: "ResumeTailor Studio | Precision ATS Tailoring",
+  description: "High-utility SaaS workspace for real-time job description tailoring, STAR/XYZ bullet optimization, and ATS verification.",
 };
 
 export default function RootLayout({
@@ -17,9 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} min-h-screen bg-[#090d16] text-slate-100 antialiased selection:bg-indigo-500 selection:text-white`}>
+      <body className={`${inter.className} min-h-screen bg-[#080c14] text-slate-100 antialiased`}>
         <Navbar />
-        <main className="max-w-7xl mx-auto px-6 py-8">{children}</main>
+        <main className="max-w-7xl mx-auto px-4 py-4">{children}</main>
       </body>
     </html>
   );

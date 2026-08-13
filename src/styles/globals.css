@@ -4,43 +4,65 @@
 
 @layer base {
   :root {
-    --background: #090d16;
-    --foreground: #f8fafc;
+    --background: #080c14;
+    --foreground: #f1f5f9;
+    --card: #0f1523;
+    --border: #1e293b;
+    --primary: #4f46e5;
   }
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-feature-settings: "rlig" 1, "calt" 1;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Glassmorphism utilities */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+/* Linear / Vercel style high-density panel styling */
+.panel {
+  background: #0f1523;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.glass-card {
-  background: rgba(30, 41, 59, 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+.panel-elevated {
+  background: #131b2e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* Custom scrollbars */
+.panel-header {
+  background: rgba(15, 21, 35, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Compact input styling */
+.input-compact {
+  background: #090d16;
+  border: 1px solid #1e293b;
+  color: #f8fafc;
+  font-size: 0.8125rem;
+  transition: all 0.15s ease;
+}
+
+.input-compact:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Custom minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b1120;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 9999px;
+  background: #232f48;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #334155;
 }

@@ -91,4 +91,12 @@ export interface TailorResponse {
   fact_check_passed: boolean;
   tailored_resume: ResumeData;
   diffs: DiffItem[];
+  ats_audit?: {
+    overall_score: number;
+    is_ats_compliant: boolean;
+    breakdown: ATSBreakdown;
+    matched_keywords?: string[];
+    missing_keywords?: string[];
+  };
 }
+
