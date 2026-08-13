@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ basics.name }} - ATS Resume</title>
+  <style>
+    @page {
+      size: letter portrait;
+      margin: 0.55in 0.6in 0.55in 0.6in;
+    }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.35;
+      color: #111827;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 12px;
+      border-bottom: 1.5px solid #1f2937;
+      padding-bottom: 8px;
+    }
+    .name {
+      font-size: 19pt;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0;
+      color: #0f172a;
+    }
+    .headline {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #334155;
+      margin: 3px 0 5px 0;
+    }
+    .contact-info {
+      font-size: 9pt;
+      color: #475569;
+    }
+    .contact-info span:not(:last-child)::after {
+      content: " • ";
+      color: #94a3b8;
+    }
+    .section-title {
+      font-size: 11pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.75px;
+      color: #0f172a;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 2px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+    .summary-text {
+      text-align: justify;
+      margin: 0 0 8px 0;
+    }
+    .item {
+      margin-bottom: 8px;
+    }
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 10pt;
+    }
+    .item-subheader {
+      display: flex;
+      justify-content: space-between;
+      font-style: italic;
+      font-size: 9.5pt;
+      color: #334155;
+      margin-bottom: 3px;
+    }
+    ul {
+      margin: 2px 0 4px 0;
+      padding-left: 18px;
+    }
+    li {
+      margin-bottom: 3px;
+      text-align: justify;
+    }
+    .skill-category {
+      margin-bottom: 4px;
+    }
+    .skill-category strong {
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1 class="name">{{ basics.name }}</h1>
+    <div class="headline">{{ basics.label }}</div>
+    <div class="contact-info">
+      {% if basics.location %}<span>{{ basics.location.city }}, {{ basics.location.region }}</span>{% endif %}
+      {% if basics.email %}<span>{{ basics.email }}</span>{% endif %}
+      {% if basics.phone %}<span>{{ basics.phone }}</span>{% endif %}
+      {% if basics.url %}<span>{{ basics.url }}</span>{% endif %}
+      {% for profile in basics.profiles %}
+        <span>{{ profile.network }}: {{ profile.username }}</span>
+      {% endfor %}
+    </div>
+  </header>
+
+  {% if basics.summary %}
+  <section>
+    <div class="section-title">Professional Summary</div>
+    <p class="summary-text">{{ basics.summary }}</p>
+  </section>
+  {% endif %}
+
+  {% if skills and skills|length > 0 %}
+  <section>
+    <div class="section-title">Technical Skills & Core Competencies</div>
+    {% for skill in skills %}
+    <div class="skill-category">
+      <strong>{{ skill.name }}:</strong> {{ skill.keywords | join(', ') }}
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if work and work|length > 0 %}
+  <section>
+    <div class="section-title">Professional Experience</div>
+    {% for job in work %}
+    <div class="item">
+      <div class="item-header">
+        <span>{{ job.position }}</span>
+        <span>{{ job.startDate }} – {{ job.endDate }}</span>
+      </div>
+      <div class="item-subheader">
+        <span>{{ job.name }}{% if job.location %} • {{ job.location }}{% endif %}</span>
+      </div>
+      {% if job.highlights %}
+      <ul>
+        {% for bullet in job.highlights %}
+        <li>{{ bullet }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if projects and projects|length > 0 %}
+  <section>
+    <div class="section-title">Key Projects</div>
+    {% for proj in projects %}
+    <div class="item">
+      <div class="item-header">
+        <span>{{ proj.name }}</span>
+        {% if proj.url %}<span>{{ proj.url }}</span>{% endif %}
+      </div>
+      <p style="margin: 2px 0;">{{ proj.description }}</p>
+      {% if proj.highlights %}
+      <ul>
+        {% for bullet in proj.highlights %}
+        <li>{{ bullet }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if education and education|length > 0 %}
+  <section>
+    <div class="section-title">Education & Credentials</div>
+    {% for edu in education %}
+    <div class="item">
+      <div class="item-header">
+        <span>{{ edu.institution }}</span>
+        <span>{{ edu.startDate }} – {{ edu.endDate }}</span>
+      </div>
+      <div class="item-subheader">
+        <span>{{ edu.studyType }} in {{ edu.area }}{% if edu.score %} ({{ edu.score }}){% endif %}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if certifications and certifications|length > 0 %}
+  <section>
+    <div class="section-title">Certifications</div>
+    <ul>
+      {% for cert in certifications %}
+      <li><strong>{{ cert.name }}</strong> – {{ cert.issuer }} ({{ cert.date }})</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+</body>
+</html>

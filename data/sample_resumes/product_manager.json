@@ -1,0 +1,78 @@
+{
+  "basics": {
+    "name": "Sarah Jenkins",
+    "label": "Principal Product Manager",
+    "email": "sarah.jenkins@example.com",
+    "phone": "+1 (555) 987-6543",
+    "url": "https://sarahjenkins.io",
+    "summary": "Product Management leader with 7+ years of experience launching B2B SaaS and AI-driven workflow products. Track record of scaling ARR from $2M to $18M, driving PLG conversion funnels, and leading cross-functional teams of 20+ across product, design, and data science.",
+    "location": {
+      "city": "New York",
+      "region": "New York",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "sarah-jenkins-pm",
+        "url": "https://linkedin.com/in/sarah-jenkins-pm"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Vortex AI Platform",
+      "position": "Lead Product Manager",
+      "startDate": "2021-08-01",
+      "endDate": "Present",
+      "summary": "Owner of core analytics intelligence suite and automated reporting product lines.",
+      "highlights": [
+        "Spearheaded launch of AI Insights copilot, generating $4.2M in new ARR within 9 months of release.",
+        "Increased free-to-paid trial conversion by 34% through friction-reduced onboarding experiments and cohort analytics.",
+        "Managed roadmap for 3 agile engineering squads (24 engineers/designers) utilizing Linear and Amplitude."
+      ]
+    },
+    {
+      "name": "Beacon Growth SaaS",
+      "position": "Senior Product Manager",
+      "startDate": "2018-04-01",
+      "endDate": "2021-07-31",
+      "summary": "Led self-serve acquisition funnels and integrations ecosystem.",
+      "highlights": [
+        "Launched 20+ third-party integrations (Salesforce, HubSpot, Slack), increasing multi-product retention by 22%.",
+        "Conducted 120+ user discovery interviews to define MVP specs for enterprise compliance features (SOC2, HIPAA)."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Northwestern University",
+      "area": "Industrial Engineering & Economics",
+      "studyType": "Bachelor of Science",
+      "startDate": "2013-09-01",
+      "endDate": "2017-06-15",
+      "score": "3.90 GPA"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Product Strategy",
+      "keywords": ["Product Roadmap", "Product-Led Growth (PLG)", "User Discovery", "Market & Competitive Analysis", "GTM Strategy"]
+    },
+    {
+      "name": "Analytics & Metrics",
+      "keywords": ["SQL", "Amplitude", "Mixpanel", "A/B Testing", "Cohort Retention", "Funnel Optimization"]
+    },
+    {
+      "name": "Agile & Delivery",
+      "keywords": ["Scrum", "Sprint Planning", "PRD Authoring", "Jira", "Linear", "Figma Design Sprints"]
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Reforge Product Leadership",
+      "date": "2022-06-01",
+      "issuer": "Reforge"
+    }
+  ]
+}

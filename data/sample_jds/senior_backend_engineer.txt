@@ -1,0 +1,31 @@
+Title: Senior Backend & Distributed Systems Engineer
+Company: StripeStream Cloud
+Location: San Francisco, CA (Hybrid / Remote)
+Employment Type: Full-time
+
+About Us:
+StripeStream Cloud powers mission-critical financial event pipelines and real-time ledger synchronization for global fintech platforms. We process tens of billions of transactions monthly with ultra-low latency guarantees.
+
+Role Summary:
+We are seeking a Senior Backend Engineer to design and scale our next-generation distributed transaction processing backbone. You will architect high-throughput event queues, build bulletproof REST/gRPC APIs, optimize database queries, and lead infrastructure resilience initiatives.
+
+Key Responsibilities:
+- Design, implement, and maintain high-throughput asynchronous microservices in Python (FastAPI/AsyncIO) or Go.
+- Architect real-time event streaming and message queuing systems using Apache Kafka, RabbitMQ, and Redis.
+- Optimize multi-tenant PostgreSQL databases for read/write heavy workloads and low latencies.
+- Deploy and manage containerized workloads on Kubernetes clusters across multi-region AWS environments.
+- Champion engineering best practices, CI/CD automation, unit/integration testing, and observability (Prometheus/Grafana/Datadog).
+- Partner with security and compliance teams to ensure strict SOC2 and financial data isolation.
+
+Required Qualifications (Must-Have):
+- 5+ years of software engineering experience in backend and distributed systems.
+- Deep expertise in Python (FastAPI, AsyncIO) and/or Go.
+- Production experience with Apache Kafka or distributed event streams.
+- Strong proficiency in SQL, schema design, and PostgreSQL performance tuning.
+- Hands-on experience with Docker, Kubernetes, and AWS cloud infrastructure (ECS/EKS, RDS, S3).
+- Proven track record of architecting systems handling high-traffic and low-latency workloads.
+
+Preferred Qualifications (Nice-to-Have):
+- Experience in Fintech, payments, or transaction ledger systems.
+- Experience with Terraform or Infrastructure as Code (IaC).
+- Familiarity with gRPC, Protocol Buffers, and Redis caching architectures.

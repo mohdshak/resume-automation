@@ -1,0 +1,113 @@
+{
+  "basics": {
+    "name": "Alex Mercer",
+    "label": "Senior Full Stack & Distributed Systems Engineer",
+    "email": "alex.mercer@example.com",
+    "phone": "+1 (555) 234-5678",
+    "url": "https://alexmercer.dev",
+    "summary": "Full Stack Engineer with 6+ years of experience designing high-throughput microservices, cloud infrastructure, and responsive web applications. Specialized in Python, TypeScript, FastAPI, React, Kubernetes, and distributed event-driven systems handling 50M+ daily requests.",
+    "location": {
+      "city": "San Francisco",
+      "region": "California",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "alexmercer-dev",
+        "url": "https://linkedin.com/in/alexmercer-dev"
+      },
+      {
+        "network": "GitHub",
+        "username": "alexmercer",
+        "url": "https://github.com/alexmercer"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "CloudScale Technologies",
+      "position": "Senior Software Engineer",
+      "url": "https://cloudscale.example.com",
+      "startDate": "2022-03-01",
+      "endDate": "Present",
+      "summary": "Lead engineer on the real-time stream processing platform and multi-tenant data ingest API.",
+      "highlights": [
+        "Architected asynchronous ingestion pipeline using FastAPI, Apache Kafka, and PostgreSQL, scaling throughput from 10K to 85K events/sec with sub-50ms latency.",
+        "Reduced cloud infrastructure costs by 32% ($140K/yr) by optimizing Kubernetes pod autoscaling and container memory footprint.",
+        "Mentored team of 6 engineers and spearheaded automated CI/CD migration to GitHub Actions, cutting release deployment cycle times by 45%."
+      ]
+    },
+    {
+      "name": "Nexus Fintech Labs",
+      "position": "Software Engineer",
+      "url": "https://nexusfintech.example.com",
+      "startDate": "2019-06-01",
+      "endDate": "2022-02-28",
+      "summary": "Core backend engineer for merchant payment processing engine and fraud detection pipeline.",
+      "highlights": [
+        "Built resilient REST APIs and webhook delivery service in Python and Redis handling $12M daily transaction volume with 99.99% uptime.",
+        "Implemented real-time anomaly detection heuristics, reducing fraudulent transaction attempts by 28%.",
+        "Developed reusable React and TypeScript merchant dashboard components adopted by 15,000+ business customers."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of California, Berkeley",
+      "url": "https://berkeley.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2015-08-01",
+      "endDate": "2019-05-15",
+      "score": "3.85 GPA",
+      "courses": [
+        "Distributed Systems",
+        "Database Architecture",
+        "Algorithms & Data Structures",
+        "Computer Security"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Master",
+      "keywords": ["Python", "TypeScript", "JavaScript", "Go", "SQL"]
+    },
+    {
+      "name": "Backend & Distributed Systems",
+      "level": "Master",
+      "keywords": ["FastAPI", "Django", "Node.js", "Apache Kafka", "Redis", "gRPC", "RESTful APIs", "Microservices"]
+    },
+    {
+      "name": "Cloud & DevOps",
+      "level": "Proficient",
+      "keywords": ["AWS (ECS, S3, RDS, Lambda)", "Docker", "Kubernetes", "Terraform", "CI/CD", "Prometheus", "Grafana"]
+    },
+    {
+      "name": "Frontend & UI",
+      "level": "Proficient",
+      "keywords": ["React", "Next.js", "Tailwind CSS", "Redux", "HTML5/CSS3"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "AsyncQuery: High Performance Cache Engine",
+      "description": "Open-source distributed in-memory cache written in Python with Redis-compatible protocol.",
+      "highlights": [
+        "Gained 1,200+ GitHub stars and over 50,000 downloads on PyPI.",
+        "Benchmarked 30% higher read throughput compared to standard Python cache wrappers."
+      ],
+      "keywords": ["Python", "AsyncIO", "Redis Protocol", "Distributed Systems"],
+      "url": "https://github.com/alexmercer/asyncquery"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Solutions Architect – Associate",
+      "date": "2023-04-10",
+      "issuer": "Amazon Web Services"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "basics": {
+    "name": "Dr. Maya Patel",
+    "label": "Staff Machine Learning Engineer & Data Scientist",
+    "email": "maya.patel@example.com",
+    "phone": "+1 (555) 345-6789",
+    "url": "https://mayapatel.ai",
+    "summary": "Data Scientist & ML Engineer with 6+ years specializing in Large Language Model (LLM) fine-tuning, RAG pipelines, recommender systems, and productionizing deep learning models on GPU clusters. PhD in Artificial Intelligence.",
+    "location": {
+      "city": "Seattle",
+      "region": "Washington",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "dr-mayapatel",
+        "url": "https://linkedin.com/in/dr-mayapatel"
+      },
+      {
+        "network": "GitHub",
+        "username": "mayapatel-ai",
+        "url": "https://github.com/mayapatel-ai"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "OmniAI Labs",
+      "position": "Staff Machine Learning Engineer",
+      "startDate": "2022-01-01",
+      "endDate": "Present",
+      "summary": "Tech lead for enterprise Generative AI workflows and hybrid retrieval-augmented generation (RAG) systems.",
+      "highlights": [
+        "Designed and deployed enterprise RAG pipeline indexing 40M+ multimodal documents with Milvus and LangChain, improving answer recall from 64% to 92%.",
+        "Fine-tuned open-weights LLMs (Llama 3, Mistral) using LoRA and QLoRA on 8x H100 GPU clusters, cutting API inference costs by 68% ($320K/yr).",
+        "Published 2 peer-reviewed papers on hallucination suppression in retrieval systems."
+      ]
+    },
+    {
+      "name": "Aether Data Systems",
+      "position": "Senior Data Scientist",
+      "startDate": "2019-07-01",
+      "endDate": "2021-12-31",
+      "summary": "Developed customer churn prediction and product recommendation algorithms.",
+      "highlights": [
+        "Built two-tower recommendation model in PyTorch and Triton Inference Server, increasing click-through rate (CTR) by 19.4% across 8M MAU.",
+        "Created automated feature store and model drift monitoring pipeline using Feast and MLflow."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Washington",
+      "area": "Computer Science & Artificial Intelligence",
+      "studyType": "Ph.D.",
+      "startDate": "2015-09-01",
+      "endDate": "2019-06-15"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Machine Learning & AI",
+      "keywords": ["PyTorch", "TensorFlow", "Transformers (Hugging Face)", "LLM Fine-tuning (LoRA)", "RAG Systems", "LangChain", "Vector Databases (Milvus, Chroma)"]
+    },
+    {
+      "name": "Data Engineering & MLOps",
+      "keywords": ["Python", "SQL", "Spark", "MLflow", "Triton", "Docker", "Kubernetes", "Ray"]
+    }
+  ]
+}

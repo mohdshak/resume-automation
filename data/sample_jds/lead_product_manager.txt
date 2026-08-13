@@ -1,0 +1,23 @@
+Title: Lead / Principal Product Manager (AI Platforms)
+Company: Nexus Enterprise AI
+Location: New York, NY (Hybrid)
+Employment Type: Full-time
+
+About Nexus:
+Nexus builds generative AI workflows and intelligence assistants for Fortune 500 enterprises.
+
+Role Overview:
+We are looking for an experienced Principal Product Manager to lead our Core AI Copilot and Analytics product line. You will define the vision, orchestrate product strategy, drive user adoption, and collaborate closely with AI research, engineering, and enterprise customer success.
+
+Responsibilities:
+- Define and execute the multi-year product roadmap for enterprise AI workflow automation.
+- Drive Product-Led Growth (PLG) initiatives, self-serve onboarding, and conversion funnel optimization.
+- Lead user discovery, customer advisory councils, and qualitative feedback sessions with enterprise buyers.
+- Write crisp, high-impact Product Requirement Documents (PRDs) and partner with engineering squads.
+- Establish core metrics (ARR growth, retention, DAU/MAU, feature adoption) using Amplitude and SQL.
+
+Requirements:
+- 6+ years of product management experience in B2B SaaS, developer platforms, or AI applications.
+- Demonstrated success driving ARR growth, enterprise feature launches, and PLG funnels.
+- Strong analytical skills: fluent with SQL, event tracking, and A/B experimentation.
+- Outstanding communication, cross-functional leadership, and stakeholder management skills.
