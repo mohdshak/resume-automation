@@ -12,3 +12,7 @@ python-docx>=1.1.2
 # LLM & Multi-Agent Templating
 jinja2>=3.1.4
 python-dotenv>=1.0.1
+
+# Database
+pymongo>=4.8.0
+

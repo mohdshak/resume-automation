@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getDatabase, isMongoConfigured } from "@/lib/mongodb";
+
 
 // 7-Agent Core Logic in Next.js Serverless Runtime
 function computeAtsScore(resume: any, extractedJd: any) {
@@ -124,6 +126,27 @@ export async function POST(req: NextRequest) {
     // 6. ATS Critic & Score Evaluator (Target >= 85%)
     const atsAudit = computeAtsScore(tailoredResume, extracted);
 
+    // 7. Persist to MongoDB Atlas if configured
+    try {
+      if (isMongoConfigured()) {
+        const db = await getDatabase();
+        if (db) {
+          await db.collection("tailored_resumes").insertOne({
+            job_id: `job-${Date.now()}`,
+            target_role: role,
+            target_company: company,
+            ats_score: atsAudit.overall_score,
+            tailored_resume: tailoredResume,
+            diffs: diffs,
+            ats_audit: atsAudit,
+            created_at: new Date(),
+          });
+        }
+      }
+    } catch (dbErr) {
+      console.warn("MongoDB auto-save notice:", dbErr);
+    }
+
     return NextResponse.json({
       job_id: `job-${Date.now()}`,
       target_role: role,
@@ -140,3 +163,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message || "Failed to process tailoring request" }, { status: 500 });
   }
 }
+
