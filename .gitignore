@@ -28,12 +28,17 @@ wheels/
 htmlcov/
 
 # Node / Next.js
+node_modules/
+.next/
+out/
+.turbo/
 frontend/node_modules/
 frontend/.next/
 frontend/out/
 frontend/.turbo/
 .npm
 .yarn
+
 
 # Environment & Secret files
 .env

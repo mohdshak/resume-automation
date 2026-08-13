@@ -1,0 +1,14 @@
+# Core FastAPI & Serverless
+fastapi>=0.111.0
+uvicorn>=0.30.0
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+python-multipart>=0.0.9
+
+# Document Parsers
+pypdf>=4.2.0
+python-docx>=1.1.2
+
+# LLM & Multi-Agent Templating
+jinja2>=3.1.4
+python-dotenv>=1.0.1
