@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { extractTextFromPdfBuffer, extractTextFromDocxBuffer, parseResumeTextToSchema } from "@/lib/resume-parser";
+import { extractTextFromPdfBuffer } from "@/lib/pdf-server";
+import { extractTextFromDocxBuffer, parseResumeTextToSchema } from "@/lib/resume-parser";
+
 
 export async function POST(req: NextRequest) {
   try {

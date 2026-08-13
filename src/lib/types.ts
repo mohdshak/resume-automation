@@ -64,7 +64,9 @@ export interface ResumeData {
   skills: SkillCategory[];
   projects?: Project[];
   certifications?: Certification[];
+  raw_text?: string;
 }
+
 
 export interface DiffItem {
   section: string;

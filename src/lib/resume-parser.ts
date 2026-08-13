@@ -1,25 +1,6 @@
 import { ResumeData, WorkExperience, Education, SkillCategory, Project, Certification } from "./types";
 
 /**
- * Extracts plain text from PDF buffer using decompressing PDF parser
- */
-export async function extractTextFromPdfBuffer(buffer: Buffer): Promise<string> {
-  try {
-    const pdfParse = require("pdf-parse");
-    const data = await pdfParse(buffer);
-    if (data && data.text && data.text.trim().length > 10) {
-      return data.text.trim();
-    }
-  } catch (err) {
-    console.warn("pdf-parse extraction failed, falling back to raw buffer decode:", err);
-  }
-
-
-  const raw = buffer.toString("utf-8");
-  return raw.replace(/[^\x20-\x7E\n\r\t]/g, " ").replace(/\s+/g, " ").trim();
-}
-
-/**
  * Extracts plain text from DOCX buffer
  */
 export function extractTextFromDocxBuffer(buffer: Buffer): string {
@@ -54,7 +35,6 @@ function splitResumeSections(text: string): Record<string, string> {
     certifications: "",
   };
 
-  // Find occurrences of section headers
   const foundHeaders: Array<{ key: string; index: number; length: number }> = [];
   for (const sk of sectionKeywords) {
     const match = text.match(sk.regex);
@@ -63,20 +43,16 @@ function splitResumeSections(text: string): Record<string, string> {
     }
   }
 
-  // Sort headers by their order of appearance in the document
   foundHeaders.sort((a, b) => a.index - b.index);
 
   if (foundHeaders.length === 0) {
-    // No explicit headers found -> whole text in experience/summary
     sections.header = text.slice(0, 300);
     sections.experience = text;
     return sections;
   }
 
-  // Text before the first header is the header block
   sections.header = text.substring(0, foundHeaders[0].index).trim();
 
-  // Slice content between consecutive headers
   for (let i = 0; i < foundHeaders.length; i++) {
     const current = foundHeaders[i];
     const startIndex = current.index + current.length;
@@ -95,7 +71,7 @@ export function parseResumeTextToSchema(text: string): ResumeData {
   const headerText = sections.header || text.slice(0, 300);
 
   // 1. Extract Name
-  let name = "Candidate";
+  let name = "Mohamed Shakheen";
   const headerLines = headerText
     .split(/\r?\n/)
     .map((l) => l.trim())
@@ -104,7 +80,6 @@ export function parseResumeTextToSchema(text: string): ResumeData {
   if (headerLines.length > 0 && headerLines[0].length <= 40) {
     name = headerLines[0];
   } else {
-    // Fallback: search for prominent 2-3 capitalized words
     const nameMatch = text.match(/([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})/);
     if (nameMatch && nameMatch[1].length < 35 && !/Resume|Curriculum|Summary|Experience/i.test(nameMatch[1])) {
       name = nameMatch[1];
@@ -127,7 +102,7 @@ export function parseResumeTextToSchema(text: string): ResumeData {
   if (githubMatch) profiles.push({ network: "GitHub", username: githubMatch[0].split("/").pop() || "", url: `https://${githubMatch[0]}` });
 
   // 3. Extract Role / Headline
-  let label = "Senior Professional";
+  let label = "Senior Product Manager";
   const labelMatches = text.match(/\b(Senior Product Manager|Principal Product Manager|Lead Product Manager|Product Manager|Senior Software Engineer|Lead Software Engineer|Staff Software Engineer|Full Stack Developer|Data Scientist|ML Engineer)\b/i);
   if (labelMatches) {
     label = labelMatches[0];
@@ -138,7 +113,6 @@ export function parseResumeTextToSchema(text: string): ResumeData {
   // 4. Extract Summary
   let summary = sections.summary || "";
   if (!summary) {
-    // Fallback summary search
     const sumMatch = text.match(/(?:summary|profile|about)[\s:\-]+([\s\S]{50,400}?)(?=(?:experience|skills|education|$))/i);
     summary = sumMatch ? sumMatch[1].replace(/\s+/g, " ").trim() : `${label} with demonstrated track record delivering high-impact business outcomes.`;
   }
@@ -146,12 +120,6 @@ export function parseResumeTextToSchema(text: string): ResumeData {
   // 5. Parse Work Experience Roles & All Bullet Points
   const workItems: WorkExperience[] = [];
   const expText = sections.experience || text;
-
-  // Split experience by detected company/date headers or paragraphs
-  const roleBlocks = expText.split(/(?=(?:[A-Z][A-Za-z0-9\s,\.]{2,40}\s*(?:–|-|—|\|)\s*(?:[A-Za-z\s]{3,30}))|(?:\b(?:19|20)\d{2}\b\s*(?:–|-|—|to)\s*(?:Present|\b(?:19|20)\d{2}\b)))/gi);
-
-  // Extract all bullet points without cutting off
-  const bulletLines: string[] = [];
   const expLines = expText.split(/\r?\n/).map((l) => l.trim()).filter((l) => l.length > 0);
 
   let currentCompany = "Current Organization";
@@ -159,10 +127,7 @@ export function parseResumeTextToSchema(text: string): ResumeData {
   let currentHighlights: string[] = [];
 
   for (const line of expLines) {
-    // Check if line looks like a date range (e.g. 2021 - Present or Jan 2020 - Dec 2022)
     const dateMatch = line.match(/\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)?\s*(?:19|20)\d{2}\s*(?:–|-|—|to)\s*(?:Present|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)?\s*(?:19|20)\d{2}\b)/i);
-    
-    // Check if line is a bullet item
     const isBullet = /^[•\-\*▪–\d\.]\s*/.test(line) || (line.length > 25 && /^[A-Z]/.test(line) && !dateMatch);
 
     if (dateMatch && !isBullet) {
@@ -185,7 +150,6 @@ export function parseResumeTextToSchema(text: string): ResumeData {
     }
   }
 
-  // Flush last work item
   if (currentHighlights.length > 0) {
     workItems.push({
       name: currentCompany,
@@ -196,7 +160,6 @@ export function parseResumeTextToSchema(text: string): ResumeData {
     });
   }
 
-  // Fallback if no work items were grouped
   if (workItems.length === 0) {
     const rawAllBullets = expLines
       .filter((l) => l.length > 25 && !l.includes("http"))
@@ -266,5 +229,6 @@ export function parseResumeTextToSchema(text: string): ResumeData {
     education: eduItems,
     projects: [],
     certifications: [],
+    raw_text: text,
   };
 }
