@@ -23,6 +23,12 @@ export const api = {
     return res.data;
   },
 
+  pasteResume: async (raw_text: string) => {
+    const res = await apiClient.post("/onboarding/paste", { raw_text });
+    return res.data;
+  },
+
+
   loadSampleProfile: async (sampleType: "tech" | "product" | "data" = "tech") => {
     const res = await apiClient.get(`/onboarding/sample/${sampleType}`);
     return res.data;
