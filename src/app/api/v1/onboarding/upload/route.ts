@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         extractedText = buffer.toString("utf-8");
       }
     } else if (filename.endsWith(".pdf")) {
-      extractedText = extractTextFromPdfBuffer(buffer);
+      extractedText = await extractTextFromPdfBuffer(buffer);
     } else if (filename.endsWith(".docx")) {
       extractedText = extractTextFromDocxBuffer(buffer);
     } else {
