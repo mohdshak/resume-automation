@@ -1,7 +1,7 @@
 """
 Onboarding & FTUE Endpoints
 Step 1: Upload Resume (PDF/DOCX/TXT/JSON)
-Step 2: Parse to structured JSON Resume
+Step 2: High-Precision Extraction with PyMuPDF (fitz)
 Step 3: Return editable Master Profile preview
 """
 
@@ -9,7 +9,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict, Optional
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
-from backend.app.parsers import parse_pdf_resume, parse_docx_resume, parse_text_resume
+from backend.app.parsers.pdf_extractor import extract_pdf_blocks_pymupdf, parse_extracted_pdf_to_schema
+from backend.app.parsers import parse_docx_resume, parse_text_resume
 
 router = APIRouter()
 
@@ -20,14 +21,15 @@ _master_vault: Dict[str, Any] = {}
 @router.post("/upload")
 async def upload_resume(file: UploadFile = File(...)):
     """
-    Parses an uploaded resume file (.pdf, .docx, .txt, .json).
+    Parses an uploaded resume file (.pdf, .docx, .txt, .json) using PyMuPDF.
     """
     contents = await file.read()
     filename = file.filename.lower()
     
     try:
         if filename.endswith(".pdf"):
-            parsed_data = parse_pdf_resume(contents)
+            extracted = extract_pdf_blocks_pymupdf(contents)
+            parsed_data = parse_extracted_pdf_to_schema(extracted)
         elif filename.endswith(".docx"):
             parsed_data = parse_docx_resume(contents)
         elif filename.endswith(".json"):
@@ -70,7 +72,6 @@ async def load_sample_profile(sample_type: str = "tech"):
     }
     file_name = mapping.get(sample_type, "tech_software_engineer.json")
     
-    # Try multiple candidate paths for local dev and Vercel serverless runtime
     candidate_paths = [
         Path(__file__).resolve().parents[4] / "data" / "sample_resumes" / file_name,
         Path.cwd() / "data" / "sample_resumes" / file_name,
@@ -87,7 +88,6 @@ async def load_sample_profile(sample_type: str = "tech"):
             except Exception:
                 pass
 
-    # Self-contained fallback in case filesystem is isolated
     if not data:
         data = {
             "basics": {
@@ -119,4 +119,3 @@ async def load_sample_profile(sample_type: str = "tech"):
         "sample_type": sample_type,
         "parsed_profile": data
     }
-
