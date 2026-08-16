@@ -1,6 +1,44 @@
 import mammoth from "mammoth";
 
 /**
+ * Checks whether a line is raw PDF binary/structural metadata
+ */
+export function isPdfBinaryArtifact(line: string): boolean {
+  if (!line || typeof line !== "string") return true;
+  const clean = line.trim();
+  if (clean.length === 0) return true;
+  // Match common PDF structure keywords and binary metadata
+  if (/^(%PDF-|<<|>>|endobj|endstream|startxref|xref|trailer)/i.test(clean)) return true;
+  if (/\b(ViewerPreferences|OutputIntents|StructTreeRoot|ParentTree|CreationDate|ModDate|xmp:|rdf:|<rdf:|<\?xpacket|\/Type\s*\/|\/Font\s*\/|\/Pages\s*\/|\/Kids\s*\[|\/MediaBox)\b/i.test(clean)) return true;
+  if (/^[A-Za-z0-9_\-\/\s]{1,10}\s*\d+\s+0\s+R\b/.test(clean)) return true;
+  if (/[\\~^&%#$@`]{4,}/.test(clean)) return true;
+  return false;
+}
+
+/**
+ * Extracts clean plain text from PDF buffer using pdf-parse and artifact filtering
+ */
+export async function extractTextFromPdfBuffer(buffer: Buffer): Promise<string> {
+  try {
+    const pdf = require("pdf-parse");
+    const data = await pdf(buffer);
+    if (data && data.text && data.text.trim().length > 10) {
+      const filtered = data.text
+        .split(/\r?\n/)
+        .map((l: string) => l.trim())
+        .filter((l: string) => !isPdfBinaryArtifact(l))
+        .join("\n")
+        .trim();
+      return filtered;
+    }
+  } catch (err) {
+    console.warn("pdf-parse extraction failed:", err);
+  }
+
+  return "";
+}
+
+/**
  * Converts DOCX binary buffer into clean semantic HTML
  */
 export async function convertDocxToHtml(buffer: Buffer): Promise<string> {
@@ -14,121 +52,49 @@ export async function convertDocxToHtml(buffer: Buffer): Promise<string> {
 }
 
 /**
- * Converts PDF binary buffer into structured semantic HTML using pdf2json & line grouping
+ * Converts PDF binary buffer into structured semantic HTML
  */
 export async function convertPdfToHtml(buffer: Buffer): Promise<string> {
-  return new Promise((resolve, reject) => {
-    try {
-      const PDFParser = require("pdf2json");
-      const pdfParser = new PDFParser();
+  const extractedText = await extractTextFromPdfBuffer(buffer);
+  if (!extractedText || extractedText.length === 0) {
+    return `<div class="resume-document"><p>No text could be extracted from PDF stream.</p></div>`;
+  }
 
-      pdfParser.on("pdfParser_dataError", (errData: any) => {
-        console.warn("pdf2json error, falling back to basic HTML:", errData);
-        resolve(fallbackBufferToHtml(buffer));
-      });
-
-      pdfParser.on("pdfParser_dataReady", (pdfData: any) => {
-        try {
-          const html = renderPdfJsonToHtml(pdfData);
-          resolve(html);
-        } catch (renderErr) {
-          console.error("PDF JSON rendering error:", renderErr);
-          resolve(fallbackBufferToHtml(buffer));
-        }
-      });
-
-      pdfParser.parseBuffer(buffer);
-    } catch (err) {
-      console.error("PDF to HTML error:", err);
-      resolve(fallbackBufferToHtml(buffer));
-    }
-  });
-}
-
-/**
- * Groups PDF text elements into lines, headings, paragraphs, and list items
- */
-function renderPdfJsonToHtml(pdfData: any): string {
-  const pages = pdfData.Pages || [];
+  const lines = extractedText.split(/\r?\n/).map((l) => l.trim()).filter((l) => l.length > 0 && !isPdfBinaryArtifact(l));
   let html = `<div class="resume-document">\n`;
+  let inList = false;
 
-  for (const page of pages) {
-    const texts = page.Texts || [];
-    if (texts.length === 0) continue;
+  for (const line of lines) {
+    const isHeading = /^(PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|EXPERIENCE|EMPLOYMENT HISTORY|EDUCATION|SKILLS|TECHNICAL SKILLS|PROJECTS|CERTIFICATIONS)$/i.test(line);
+    const isBullet = /^[•\-\*▪–\d\.]\s*/.test(line);
 
-    // Group text items by vertical Y coordinate (within threshold of ~0.35)
-    const lineMap = new Map<number, any[]>();
-    for (const t of texts) {
-      const y = Math.round(t.y * 2) / 2; // snap to nearest half unit
-      if (!lineMap.has(y)) {
-        lineMap.set(y, []);
+    if (isHeading) {
+      if (inList) {
+        html += `  </ul>\n`;
+        inList = false;
       }
-      lineMap.get(y)!.push(t);
-    }
-
-    // Sort lines from top to bottom
-    const sortedY = Array.from(lineMap.keys()).sort((a, b) => a - b);
-    let inList = false;
-
-    for (const y of sortedY) {
-      const lineItems = lineMap.get(y)!;
-      // Sort items left to right
-      lineItems.sort((a, b) => a.x - b.x);
-
-      // Decode and concatenate text fragments
-      const rawLine = lineItems
-        .map((item) => {
-          const textVal = item.R?.map((r: any) => decodeURIComponent(r.T)).join("") || "";
-          const isBold = item.R?.some((r: any) => r.TS?.[2] === 1 || r.TS?.[1] > 14);
-          return isBold ? `<strong>${textVal}</strong>` : textVal;
-        })
-        .join(" ")
-        .trim();
-
-      if (!rawLine || rawLine.length === 0) continue;
-
-      // Detect section headings
-      const isHeading = /^(PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|EXPERIENCE|EMPLOYMENT HISTORY|EDUCATION|SKILLS|TECHNICAL SKILLS|PROJECTS|CERTIFICATIONS)$/i.test(
-        rawLine.replace(/<[^>]+>/g, "").trim()
-      );
-
-      // Detect list items / bullet points
-      const isBullet = /^[•\-\*▪–\d\.]\s*/.test(rawLine.replace(/<[^>]+>/g, "").trim());
-
-      if (isHeading) {
-        if (inList) {
-          html += `  </ul>\n`;
-          inList = false;
-        }
-        html += `  <h2 class="section-title">${rawLine}</h2>\n`;
-      } else if (isBullet) {
-        if (!inList) {
-          html += `  <ul>\n`;
-          inList = true;
-        }
-        const cleanItem = rawLine.replace(/^[•\-\*▪–\d\.]\s*/, "").trim();
-        html += `    <li>${cleanItem}</li>\n`;
-      } else {
-        if (inList) {
-          html += `  </ul>\n`;
-          inList = false;
-        }
-        html += `  <p>${rawLine}</p>\n`;
+      html += `  <h2 class="section-title">${line}</h2>\n`;
+    } else if (isBullet) {
+      if (!inList) {
+        html += `  <ul>\n`;
+        inList = true;
       }
+      const cleanItem = line.replace(/^[•\-\*▪–\d\.]\s*/, "").trim();
+      html += `    <li>${cleanItem}</li>\n`;
+    } else {
+      if (inList) {
+        html += `  </ul>\n`;
+        inList = false;
+      }
+      html += `  <p>${line}</p>\n`;
     }
+  }
 
-    if (inList) {
-      html += `  </ul>\n`;
-      inList = false;
-    }
+  if (inList) {
+    html += `  </ul>\n`;
+    inList = false;
   }
 
   html += `</div>`;
   return html;
-}
-
-function fallbackBufferToHtml(buffer: Buffer): string {
-  const text = buffer.toString("utf-8").replace(/[^\x20-\x7E\n\r\t]/g, " ");
-  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter((l) => l.length > 0);
-  return `<div class="resume-document">\n${lines.map((l) => `<p>${l}</p>`).join("\n")}\n</div>`;
 }
